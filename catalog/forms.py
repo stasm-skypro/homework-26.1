@@ -3,36 +3,58 @@
 """
 
 from django import forms
-from django.forms import ClearableFileInput
 
-from catalog.models import Contact, Product
+from catalog.models import Category, Product
 
 
-# class ContactForm(forms.ModelForm):
-#     """Класс для определения формы ввода для шаблона contacts."""
-#
-#     class Meta:
-#         model = Contact
-#         fields = ["first_name", "phone", "message"]
-#         widgets = {
-#             "first_name": forms.TextInput(attrs={"class": "form-control", "placeholder": "Ваше имя"}),
-#             "phone": forms.TextInput(attrs={"class": "form-control", "placeholder": "Контактный телефон"}),
-#             "message": forms.Textarea(attrs={"class": "form-control", "placeholder": "Сообщение"}),
-#         }
+class CategoryForm(forms.ModelForm):
+    """Форма для ввода данных о категории товаров."""
+    class Meta:
+        model = Category
+        fields = '__all__'
+        labels = {
+            "name": "Наименование категории",
+            "description": "Описание",
+        }
 
-#
-# class ProductForm(forms.ModelForm):
-#     """Класс для определения формы создания и редактирования товара."""
-#
-#     class Meta:
-#         model = Product
-#         fields = ["product", "description", "image", "category", "price", "created_at", "changed_at"]
-#         widgets = {
-#             "product": forms.TextInput(attrs={"class": "form-control", "placeholder": "Наименование продукта"}),
-#             "description": forms.Textarea(attrs={"class": "form-control", "placeholder": "Описание"}),
-#             "image": ClearableFileInput(attrs={"class": "form-control"}),
-#             "category": forms.TextInput(attrs={"class": "form-control", "placeholder": "Категория"}),
-#             "price": forms.TextInput(attrs={"class": "form-control", "placeholder": "Цена"}),
-#             "created_at": forms.TextInput(attrs={"class": "form-control", "placeholder": "Дата производства"}),
-#             "changed_at": forms.TextInput(attrs={"class": "form-control", "placeholder": "Дата упаковки"}),
-#         }
+    def __init__(self, *args, **kwargs):
+        """Стилизация формы добавления категории."""
+        super(CategoryForm, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs.update(
+                {
+                    "class": "form-control",
+                    "placeholder": self.fields[field].label,
+                    "style": "font-size: 0.9em; width: 100%",
+                }
+            )
+        
+
+class ProductForm(forms.ModelForm):
+    """
+    Форма для ввода данных о продукте.
+    """
+
+    class Meta:
+        model = Product
+        fields = "__all__"
+        labels = {
+            "name": "Название",
+            "description": "Описание",
+            "price": "Цена",
+            "category": "Категория",
+            "image": "Изображение",
+        }
+
+    def __init__(self, *args, **kwargs):
+        """Стилизация формы добавления товара."""
+        super(ProductForm, self).__init__(*args, **kwargs)
+
+        for field in self.fields:
+            self.fields[field].widget.attrs.update(
+                {
+                    "class": "form-control",
+                    "placeholder": self.fields[field].label,
+                    "style": "font-size: 0.9em; width: 100%",
+                }
+            )
