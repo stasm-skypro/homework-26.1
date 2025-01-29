@@ -1,0 +1,45 @@
+<!-- blog_confirm_delete.html -->
+{% extends 'base.html' %}
+{% block title %}
+Блог
+{% endblock %}
+{% block content %}
+{% include 'header.html' %}
+{% include 'navbar.html' %}
+
+<div class="container">
+    <div class="row" style="align-items: center; justify-content: center;">
+        <div class="col-6">
+            <form class="row" method="post" enctype="multipart/form-data">
+                <div class="card">
+                    <div class="container-fluid text-primary">
+                        <h2 class="mb-4">{{ object.title }}</h2>
+                        <div class="justify-content-center">
+                            {% if product.image and product.image.url %}
+                            <img src="{{ object.preview }}" alt="{{ object.title }}"/>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <p>Дата создания: {{ blog.created_at|date:'d.m.Y' }}</p>
+                    <p>Количество просмотров: {{ blog.views_counter }}</p>
+                    <p>{{ object.content }}</p>
+                    <br/>
+                    <div class="card-body">
+                        {% if blog.preview %}
+                        <img src="{{ blog.preview.url }}" alt="{{ blog.title }}" style="max-width: 400px;"/>
+                        {% endif %}
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                    </div>
+                    <div class="btn-group">
+                        <button type="submit" class="btn btn-danger">Удалить статью</button>
+                        <a href="{% url 'blog:blog_list' %}" class="btn btn-secondary">Отменить</a>
+                    </div>
+                    <br/>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
