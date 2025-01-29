@@ -36,7 +36,7 @@
               <img src="{{ product.image.url }}" alt="{{ product.product }}" style="max-height: 200px;"/>
             </div>
             <hr style="border: none; height: 2px; background-color: #000;">
-            <h5 class="my-0 font-weight-normal text-black text-opacity-75 fw-bold">{{ product.product }}</h5>
+            <h5 class="my-0 font-weight-normal text-black text-opacity-75 fw-bold">{{ product.product|truncatechars:30 }}</h5>
             <ul class="list-group-horizontal-sm mt-3 mb-4 text-start m-3">
               <li class="fw-bold" style="font-size: 0.9em;">{{ product.description|truncatechars:30 }}</li>
               <li style="font-size: 0.9em;">Категория: {{ product.category.name }}</li>

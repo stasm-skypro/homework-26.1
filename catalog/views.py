@@ -4,7 +4,6 @@
 
 import logging
 import os
-import smtplib as smtp
 
 from django.urls import reverse_lazy
 from django.views.generic import (
@@ -146,7 +145,8 @@ class ProductUpdateView(UpdateView):
     """
 
     model = Product
-    fields = "__all__"
+    # fields = "__all__"
+    form_class = ProductForm
     success_url = reverse_lazy("catalog:product_list")
 
     def form_valid(self, form):
@@ -171,7 +171,8 @@ class ProductDeleteView(DeleteView):
     """
 
     model = Product
-    fields = "__all__"
+    # fields = "__all__"
+    form_class = ProductForm
     context_object_name = "product"
     success_url = reverse_lazy(
         "catalog:product_list"
