@@ -158,7 +158,7 @@ class TestProductDeleteView(TestCase):
         """Проверяем, что используется правильный шаблон"""
         url = reverse("catalog:product_delete", kwargs={"pk": self.product.pk})
         response = self.client.get(url)
-        self.assertTemplateUsed(response, "catalog/product_form.html")
+        self.assertTemplateUsed(response, "catalog/product_confirm_delete.html")
 
     def test_product_delete_context(self):
         """Проверяем, что объект продукта передается в контекст"""

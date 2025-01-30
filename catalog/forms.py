@@ -96,6 +96,32 @@ class ProductForm(forms.ModelForm):
         return cleaned_price
 
 
+    def clean_image_format(self):
+        """
+        Проверяет, что загружаемое изображение продукта в формате .jpg или .png.
+        """
+        image = self.cleaned_data.get("image")
+        if image:
+            valid_extensions = [".jpg", ".jpeg", ".png"]
+            ext = os.path.splitext(image.name)[1].lower()
+            if ext not in valid_extensions:
+                raise ValidationError("Допустимые форматы изображений: .jpg, .jpeg, .png.")
+
+        return image
+
+    def clean_image_size(self):
+        """
+        Проверяет, что загружаемый файл изображения не превышает 5 МБ.
+        """
+        image = self.cleaned_data.get("image")
+        max_size = 5 * 1024 * 1024  # 5 MБ
+
+        if image and image.size > max_size:
+            raise ValidationError("Размер изображения не должен превышать 5 МБ.")
+
+        return image
+
+
     def clean(self):
         forbidden_words = os.getenv("FORBIDDEN_WORDS").split(",")
         cleaned_data = super().clean()

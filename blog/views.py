@@ -1,7 +1,7 @@
 # blog/views.py
 import os
 import logging
-import smtplib as smtp
+import smtplib
 
 from django.urls import reverse_lazy
 
@@ -42,7 +42,7 @@ class BlogDetailView(DetailView):
         """
         Отправляет почту на адрес администратора.
         """
-        server = smtp.SMTP("smtp.gmail.com", 587)
+        server = smtplib.SMTP("smtp.gmail.com", 587)
         server.starttls()
         server.login(login, password)
         server.sendmail(login, "stasm226@gmail.com", body_text)
@@ -75,7 +75,6 @@ class BlogCreateView(CreateView):
     Определяет отображение страницы добавления статьи.
     """
     model = Blog
-    # fields = "__all__"
     form_class = BlogForm
     success_url = reverse_lazy("blog:blog_list")
 
@@ -100,7 +99,6 @@ class BlogUpdateView(UpdateView):
     Определяет отображение обновления статьи.
     """
     model = Blog
-    # fields = "__all__"
     form_class = BlogForm
     success_url = reverse_lazy("blog:blog_list")
 
@@ -128,7 +126,6 @@ class BlogDeleteView(DeleteView):
     Определяет отображение удаления статьи.
     """
     model = Blog
-    # fields = "__all__"
     form_class = BlogForm
     success_url = reverse_lazy("blog:blog_list")
 
