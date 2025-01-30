@@ -24,6 +24,7 @@ class BlogForm(forms.ModelForm):
 
 
     def __init__(self, *args, **kwargs):
+        """Осуществляет стилизацию формы."""
         super(BlogForm, self).__init__(*args, **kwargs)
 
         for field in self.fields:
@@ -61,6 +62,7 @@ class BlogForm(forms.ModelForm):
 
 
     def clean(self):
+        """Проверяет, что указанные поля формы не содержат запрещённые слова."""
         forbidden_words = os.getenv("FORBIDDEN_WORDS").split(",")
         cleaned_data = super().clean()
         cleaned_title = cleaned_data.get("title").split()

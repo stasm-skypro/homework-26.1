@@ -75,7 +75,7 @@ class ProductForm(forms.ModelForm):
 
 
     def __init__(self, *args, **kwargs):
-        """Стилизация формы добавления товара."""
+        """Осуществляет стилизацию формы."""
         super(ProductForm, self).__init__(*args, **kwargs)
 
         for field in self.fields:
@@ -89,6 +89,7 @@ class ProductForm(forms.ModelForm):
 
 
     def clean_price(self):
+        """Проверяет, что введена неотрицательная цена."""
         cleaned_price = self.cleaned_data.get("price")
         if cleaned_price < 0:
             raise ValidationError("Вы указали недопустимое значение цены! Цена не может быть отрицательной!")
@@ -123,6 +124,7 @@ class ProductForm(forms.ModelForm):
 
 
     def clean(self):
+        """Проверяет, что указанные поля формы не содержат запрещённые слова."""
         forbidden_words = os.getenv("FORBIDDEN_WORDS").split(",")
         cleaned_data = super().clean()
 
