@@ -4,6 +4,7 @@
 
 import logging
 import os
+import smtplib
 
 from django.urls import reverse_lazy
 from django.views.generic import (
@@ -81,7 +82,7 @@ class ProductDetailView(DetailView):
         """
         Отправляет почту на адрес администратора.
         """
-        server = smtp.SMTP("smtp.gmail.com", 587)
+        server = smtplib.SMTP("smtp.gmail.com", 587)
         server.starttls()
         server.login(login, password)
         server.sendmail(login, "stasm226@gmail.com", body_text)
@@ -119,7 +120,6 @@ class ProductCreateView(CreateView):
     """
 
     model = Product
-    # fields = "__all__"
     form_class = ProductForm
     success_url = reverse_lazy("catalog:product_list")
 
@@ -171,12 +171,9 @@ class ProductDeleteView(DeleteView):
     """
 
     model = Product
-    # fields = "__all__"
     form_class = ProductForm
     context_object_name = "product"
-    success_url = reverse_lazy(
-        "catalog:product_list"
-    )  # Перенаправление на страницу product_list
+    success_url = reverse_lazy("catalog:product_list")
 
     def post(self, request, *args, **kwargs):
         """

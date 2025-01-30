@@ -4,6 +4,7 @@
 
 import os
 
+from django.core.exceptions import ValidationError
 from dotenv import load_dotenv
 from django import forms
 
@@ -21,15 +22,18 @@ class CategoryForm(forms.ModelForm):
             "description": "Описание",
         }
 
+
     def __init__(self, *args, **kwargs):
         """Стилизация формы добавления категории."""
         super(CategoryForm, self).__init__(*args, **kwargs)
+        
         for field in self.fields:
             self.fields[field].widget.attrs.update({
                     "class": "form-control",
                     "placeholder": self.fields[field].label,
                     "style": "font-size: 0.9em; width: 100%",
                 })
+
 
     def clean(self):
         forbidden_words = os.getenv("FORBIDDEN_WORDS").split(",")
@@ -61,10 +65,14 @@ class ProductForm(forms.ModelForm):
         labels = {
             "name": "Название",
             "description": "Описание",
-            "price": "Цена",
-            "category": "Категория",
             "image": "Изображение",
+            "category": "Категория",
+            "price": "Цена",
+            "created_at": "Дата производства",
+            "changed_at": "Дата последнего изменения",
+            "views_counter": "Количество просмотров"
         }
+
 
     def __init__(self, *args, **kwargs):
         """Стилизация формы добавления товара."""
@@ -80,14 +88,22 @@ class ProductForm(forms.ModelForm):
             )
 
 
+    def clean_price(self):
+        cleaned_price = self.cleaned_data.get("price")
+        if cleaned_price < 0:
+            raise ValidationError("Вы указали недопустимое значение цены! Цена не может быть отрицательной!")
+        
+        return cleaned_price
+
+
     def clean(self):
         forbidden_words = os.getenv("FORBIDDEN_WORDS").split(",")
         cleaned_data = super().clean()
 
-        cleaned_product = cleaned_data.get("name").split()
+        cleaned_product = cleaned_data.get("product").split()
         for word in cleaned_product:
             if word.lower() in forbidden_words:
-                self.add_error("name", "Поле с наименованием продукта содержит запрещённое слово %s." % word)
+                self.add_error("product", "Поле с наименованием продукта содержит запрещённое слово %s." % word)
                 break
 
         cleaned_description = cleaned_data.get("description").split()

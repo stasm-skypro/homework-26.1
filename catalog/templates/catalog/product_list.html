@@ -33,7 +33,11 @@
           <div class="card-header"
                style="background-color: #f8f9fa; padding: 5px; border-radius: 5px; box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);">
             <div class="justify-content-center">
-              <img src="{{ product.image.url }}" alt="{{ product.product }}" style="max-height: 200px;"/>
+              {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.product }}" style="max-height: 200px;"/>
+              {% else %}
+                <img src="/media/catalog/skystore_default.jpg" alt="{{ product.product }}" style="max-height: 200px;"/>
+              {% endif %}
             </div>
             <hr style="border: none; height: 2px; background-color: #000;">
             <h5 class="my-0 font-weight-normal text-black text-opacity-75 fw-bold">{{ product.product|truncatechars:30 }}</h5>
