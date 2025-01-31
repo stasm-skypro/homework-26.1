@@ -1,6 +1,6 @@
-<!-- product_form.html -->
+<!-- category_form.html -->
 {% extends 'base.html' %}
-{% block title %} Skystore - добавить товар {% endblock %}
+{% block title %} Skystore - добавить категорию товара {% endblock %}
 {% block content %}
   {% include 'header.html' %}
   {% include 'navbar.html' %}
@@ -10,9 +10,6 @@
         <form class="row" method="post" enctype="multipart/form-data">
           <div class="card">
             <div class="card-body">
-              {% if product.image %}
-                <img src="{{ product.image.url }}" alt="{{ product.product }}" style="max-width: 400px"/>
-              {% endif %}
               {% csrf_token %}
               {{ form.non_field_error }}
               {{ form.as_p }}
