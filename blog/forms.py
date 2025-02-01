@@ -1,5 +1,6 @@
 import os
 
+from blog.mixins import StyledFormMixin
 from django import forms
 from django.core.exceptions import ValidationError
 from dotenv import load_dotenv
@@ -7,9 +8,9 @@ from dotenv import load_dotenv
 from blog.models import Blog
 
 load_dotenv()
+                
 
-
-class BlogForm(forms.ModelForm):
+class BlogForm(StyledFormMixin, forms.ModelForm):
     class Meta:
         model = Blog
         fields = "__all__"
@@ -21,26 +22,27 @@ class BlogForm(forms.ModelForm):
             "publicated": "Признак публикации",
             "views_counter": "Количество просмотров",
         }
-
-    def __init__(self, *args, **kwargs):
-        """Осуществляет стилизацию формы."""
-        super(BlogForm, self).__init__(*args, **kwargs)
-
-        for _, field in self.fields.items():
-            if isinstance(field, forms.BooleanField):
-                field.widget.attrs.update(
-                    {
-                        "class": "form-check-input",
-                    }
-                )
-            else:
-                field.widget.attrs.update(
-                    {
-                        "class": "form-control",
-                        "placeholder": field.label,
-                        "style": "font-size: 0.9em; width: 100%",
-                    }
-                )
+    
+    # Закоментированный ниже код заменяем на класс-миксин
+    # def __init__(self, *args, **kwargs):
+    #     """Осуществляет стилизацию формы."""
+    #     super(BlogForm, self).__init__(*args, **kwargs)
+    #
+    #     for _, field in self.fields.items():
+    #         if isinstance(field, forms.BooleanField):
+    #             field.widget.attrs.update(
+    #                 {
+    #                     "class": "form-check-input",
+    #                 }
+    #             )
+    #         else:
+    #             field.widget.attrs.update(
+    #                 {
+    #                     "class": "form-control",
+    #                     "placeholder": field.label,
+    #                     "style": "font-size: 0.9em; width: 100%",
+    #                 }
+    #             )
 
     def clean_image_format(self):
         """

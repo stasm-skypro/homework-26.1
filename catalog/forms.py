@@ -4,6 +4,7 @@
 
 import os
 
+from blog.mixins import StyledFormMixin
 from django import forms
 from django.core.exceptions import ValidationError
 from dotenv import load_dotenv
@@ -13,7 +14,7 @@ from catalog.models import Category, Product
 load_dotenv()
 
 
-class CategoryForm(forms.ModelForm):
+class CategoryForm(StyledFormMixin, forms.ModelForm):
     """Форма для ввода данных о категории товаров."""
 
     class Meta:
@@ -24,25 +25,27 @@ class CategoryForm(forms.ModelForm):
             "description": "Описание",
         }
 
-    def __init__(self, *args, **kwargs):
-        """Стилизация формы добавления категории."""
-        super(CategoryForm, self).__init__(*args, **kwargs)
-
-        for _, field in self.fields.items():
-            if isinstance(field, forms.BooleanField):
-                field.widget.attrs.update(
-                    {
-                        "class": "form-check-input",
-                    }
-                )
-            else:
-                field.widget.attrs.update(
-                    {
-                        "class": "form-control",
-                        "placeholder": field.label,
-                        "style": "font-size: 0.9em; width: 100%",
-                    }
-                )
+        
+    # Закоментированный ниже код заменяем на класс-миксин
+    # def __init__(self, *args, **kwargs):
+    #     """Стилизация формы добавления категории."""
+    #     super(CategoryForm, self).__init__(*args, **kwargs)
+    #
+    #     for _, field in self.fields.items():
+    #         if isinstance(field, forms.BooleanField):
+    #             field.widget.attrs.update(
+    #                 {
+    #                     "class": "form-check-input",
+    #                 }
+    #             )
+    #         else:
+    #             field.widget.attrs.update(
+    #                 {
+    #                     "class": "form-control",
+    #                     "placeholder": field.label,
+    #                     "style": "font-size: 0.9em; width: 100%",
+    #                 }
+    #             )
 
     def clean(self):
         forbidden_words = os.getenv("FORBIDDEN_WORDS").split(",")
@@ -70,7 +73,7 @@ class CategoryForm(forms.ModelForm):
         return cleaned_data
 
 
-class ProductForm(forms.ModelForm):
+class ProductForm(StyledFormMixin, forms.ModelForm):
     """
     Форма для ввода данных о продукте.
     """
@@ -89,18 +92,27 @@ class ProductForm(forms.ModelForm):
             "views_counter": "Количество просмотров",
         }
 
-    def __init__(self, *args, **kwargs):
-        """Осуществляет стилизацию формы."""
-        super(ProductForm, self).__init__(*args, **kwargs)
-
-        for field in self.fields:
-            self.fields[field].widget.attrs.update(
-                {
-                    "class": "form-control",
-                    "placeholder": self.fields[field].label,
-                    "style": "font-size: 0.9em; width: 100%",
-                }
-            )
+    
+    # Закоментированный ниже код заменяем на класс-миксин
+    # def __init__(self, *args, **kwargs):
+    #    """Осуществляет стилизацию формы."""
+    #    super(ProductForm, self).__init__(*args, **kwargs)
+        #
+        # for _, field in self.fields.items():
+        #     if isinstance(field, forms.BooleanField):
+        #         field.widget.attrs.update(
+        #             {
+        #                 "class": "form-check-input",
+        #             }
+        #         )
+        #     else:
+        #         field.widget.attrs.update(
+        #             {
+        #                 "class": "form-control",
+        #                 "placeholder": field.label,
+        #                 "style": "font-size: 0.9em; width: 100%",
+        #             }
+        #         )
 
     def clean_price(self):
         """Проверяет, что введена неотрицательная цена."""
